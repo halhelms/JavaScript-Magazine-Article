@@ -1,0 +1,60 @@
+<table id="customers">
+   <!-- rows of customers here -->
+</table>
+
+<script type="text/javascript">
+   $('document').bind(
+      'CustomerAdded,CustomerEdited,CustomerDeleted',
+      function( eventName, eventObject ) {
+         $.post(  
+            'Customer.cfc?method=AllCustomers',
+            function( response ) {
+               if ( response.success ) {
+                  $( '#customers' ).replaceWith( response.display );
+               } else {
+                  alert( 'A problem prevented the updating of the Customer list' );
+               };
+            }
+         );
+      };
+   );
+</script>
+
+
+<form id="add_customer" method="post" action="Customer.cfc?method=create">
+   <!-- fields for entering new customer information -->
+</form>
+
+<script type="text/javascript">
+   $( '#add_customer' ).bind( 'submit', function( e ){
+      // turn the field names and values into a query string
+      var field_values = $( this ).serialize();
+      $( 'document' ).trigger(
+         'CustomerAdded',
+         {
+            field_values : field_values
+         }
+      );
+      // stop the natural form submission
+      e.preventDefault();
+   });
+</script>
+
+$( 'document' ).bind(
+   'AddCustomer,EditCustomer,DeleteCustomer,ViewCustomer',
+   function( eventName, eventObject ) {
+      $.post(
+         'Customer.cfc?method=' + eventName,
+         {
+            eventObject: eventObject
+         },
+         function( response ) {
+            $( 'document' ).trigger(
+               response.eventName,
+               response.eventObject
+            );
+         },
+         'json'
+      );
+   }
+);

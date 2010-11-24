@@ -1,0 +1,19 @@
+<html>
+	<head>
+<script type="text/javascript"
+ src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+ 	</head>
+	
+	<body>
+		<div id="test">test me</div>
+		<div id="results"></div>
+		
+		<script type="text/javascript">
+			$( '#test' ).click(function(){
+				$.getScript( 'test.js' );
+			});
+		</script>
+	</body>
+	
+</html>
+ 
